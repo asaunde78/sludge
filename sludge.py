@@ -43,7 +43,8 @@ while True:
     if rec.AcceptWaveform(data):
         print('reading')
         part_result = json.loads(rec.Result())
-        results.extend(part_result["result"])
+        if("result" in part_result):
+            results.extend(part_result["result"])
 #part_result =  json.loads(rec.FinalResult())
 #results.append(part_result)
 # print(results)
