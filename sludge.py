@@ -25,7 +25,7 @@ def filename_hook(d):
     
 
 
-model_path = "vosk-model-en-us-0.22-lgraph"
+model_path = "vosk-model-en-us-0.42-gigaspeech"
 
 audio_file = "test.wav"
 
@@ -41,10 +41,11 @@ while True:
     if(len(data)==0):
         break
     if rec.AcceptWaveform(data):
+        print('reading')
         part_result = json.loads(rec.Result())
-        results.append(part_result)
-part_result =  json.loads(rec.FinalResult())
-results.append(part_result)
+        results.extend(part_result["result"])
+#part_result =  json.loads(rec.FinalResult())
+#results.append(part_result)
 # print(results)
 
 
@@ -53,7 +54,7 @@ with open("subtitles.srt", "w") as f:
 with open("subtitles.srt", "a") as subt:
     print(results)
 
-    for i,word in enumerate(results[0]["result"]):
+    for i,word in enumerate(results):
         print("WORD: ", word)
         start = word["start"]
         end = word["end"]
@@ -71,7 +72,7 @@ opts = {
 with YoutubeDL(opts) as infograb:
     info = infograb.extract_info(mc_url, download=False)
     print(info["duration"])
-    end = results[0]["result"][-1]["end"]
+    end = results[-1]["end"]
     start = random.uniform(0, info["duration"]- end)
     
     ydl_opts = {
