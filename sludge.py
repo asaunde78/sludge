@@ -5,7 +5,7 @@ from yt_dlp import YoutubeDL, utils
 import random 
 import os
 import subprocess
-
+from datetime import timedelta
 
 
 from vosk import Model, KaldiRecognizer, SetLogLevel
@@ -56,10 +56,10 @@ with open("subtitles.srt", "a") as subt:
 
     for i,word in enumerate(results):
         print("WORD: ", word)
-        start = word["start"]
-        end = word["end"]
+        start = str(timedelta(seconds=word["start"]))
+        end = str(timedelta(seconds=word["end"]))
         txt = word["word"]
-        stri = f"{i+1}\n00:00:0{start} --> 00:00:0{end}\n\n{txt}\n\n"
+        stri = f"{i+1}\n{start} --> {end}\n\n{txt}\n\n"
         print(stri)
         subt.write(stri)
 
